@@ -37,7 +37,6 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     outputs:
       will_release: ${{ steps.determine_release.outputs.new_release_published }}
     steps:
@@ -56,7 +55,7 @@ jobs:
       - test
       - lint
       - determine_release
-    if: ${{ needs.determine_release.outputs.will_release }}
+    if: ${{ needs.determine_release.outputs.will_release && github.ref == 'refs/heads/main' }}
     environment: stable
     steps:
       - uses: actions/checkout@v3.0.1
