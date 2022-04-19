@@ -39,13 +39,17 @@ func run() int {
 	}
 	output("username", creds.user)
 	output("password", creds.password)
+	output("server", creds.server)
 	return 0
 }
 
 type ecrCredentials struct {
 	user     string
 	password string
+	server   string
 }
+
+var protocol = "https://"
 
 func getCredentials(out *ecr.GetAuthorizationTokenOutput) (*ecrCredentials, error) {
 	if len(out.AuthorizationData) != 1 {
@@ -54,6 +58,13 @@ func getCredentials(out *ecr.GetAuthorizationTokenOutput) (*ecrCredentials, erro
 	authData := out.AuthorizationData[0]
 	if authData.AuthorizationToken == nil {
 		return nil, errors.New("AuthorizationToken is empty")
+	}
+	if authData.ProxyEndpoint == nil {
+		return nil, errors.New("ProxyEndpoint is empty")
+	}
+	proxyEndpoint := *authData.ProxyEndpoint
+	if strings.HasPrefix(proxyEndpoint, protocol) {
+		proxyEndpoint = proxyEndpoint[len(protocol):]
 	}
 	decoded, err := base64.StdEncoding.DecodeString(*authData.AuthorizationToken)
 	if err != nil {
@@ -64,7 +75,7 @@ func getCredentials(out *ecr.GetAuthorizationTokenOutput) (*ecrCredentials, erro
 	if idx == -1 {
 		return nil, errors.New("malformed AuthorizationToken")
 	}
-	return &ecrCredentials{user: decodedStr[0:idx], password: decodedStr[idx+1:]}, nil
+	return &ecrCredentials{user: decodedStr[0:idx], password: decodedStr[idx+1:], server: proxyEndpoint}, nil
 }
 
 func output(name, value string) {
