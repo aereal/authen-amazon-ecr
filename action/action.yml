@@ -2,6 +2,10 @@
 
 name: Authenticate with Amazon ECR
 description: Authenticate with Amazon ECR
+author: aereal
+branding:
+  color: orange
+  icon: log-in
 outputs:
   username:
     description: retrieved ECR username
