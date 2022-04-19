@@ -1,0 +1,33 @@
+---
+
+name: Authenticate with Amazon ECR
+description: Authenticate with Amazon ECR
+inputs:
+outputs:
+  username:
+    description: retrieved ECR username
+    value: ${{ steps.authen.outputs.username }}
+  password:
+    description: retrieved ECR username
+    value: ${{ steps.authen.outputs.password }}
+runs:
+  using: composite
+  steps:
+    - name: restore cache
+      id: use-cache
+      uses: actions/cache@v3.0.2
+      with:
+        path: /opt/authen-amazon-ecr
+        key: authen-amazon-ecr
+    - name: install
+      if: ${{ ! steps.use-cache.outputs.cache-hit }}
+      shell: bash
+      run: |
+        curl -sLO https://github.com/aereal/authen-amazon-ecr/releases/download/v1.0.0/authen-amazon-ecr_1.0.0_linux_amd64.tar.gz
+        tar xzf ./authen-amazon-ecr_1.0.0_linux_amd64.tar.gz
+        mkdir -p /opt/authen-amazon-ecr/bin
+        cp ./authen-amazon-ecr /opt/authen-amazon-ecr/bin/
+    - name: run authenticate-amazon-ecr
+      id: authen
+      shell: bash
+      run: /opt/authen-amazon-ecr/bin/authen-amazon-ecr
