@@ -34,6 +34,8 @@ jobs:
         with:
           files: ./cover.txt
   determine_release:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     outputs:
@@ -47,6 +49,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
   release:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     needs:
       - test
