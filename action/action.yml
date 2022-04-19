@@ -13,6 +13,9 @@ outputs:
   password:
     description: retrieved ECR username
     value: ${{ steps.authen.outputs.password }}
+  server:
+    description: ECR repository server name
+    value: ${{ steps.authen.outputs.server }}
 runs:
   using: composite
   steps:
