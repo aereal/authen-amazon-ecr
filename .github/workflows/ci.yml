@@ -102,5 +102,10 @@ jobs:
           key: go-1.18.x-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             go-1.18.x-
-      - run: |
+      - id: run
+        run: |
           go run ./cmd/authen-amazon-ecr
+      - run: |
+          echo "server=${_server}"
+        env:
+          _server: ${{ steps.run.outputs.server }}
