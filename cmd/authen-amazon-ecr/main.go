@@ -40,6 +40,7 @@ func run() int {
 	output("username", creds.user)
 	output("password", creds.password)
 	output("server", creds.server)
+	fmt.Printf("---> username=%q server=%q\n", creds.user, creds.server)
 	return 0
 }
 
