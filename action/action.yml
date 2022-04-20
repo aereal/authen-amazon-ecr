@@ -19,6 +19,9 @@ outputs:
 runs:
   using: composite
   steps:
+    - name: dump ref
+      shell: bash
+      run: echo "github.action_ref=${{ github.action_ref }} github.ref=${{ github.ref }} github.head_ref=${{ github.head_ref }} github.ref_name=${{ github.ref_name }}"
     - name: restore cache
       id: use-cache
       uses: actions/cache@v3.0.2
