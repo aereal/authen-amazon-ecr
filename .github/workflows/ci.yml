@@ -80,3 +80,15 @@ jobs:
           args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ github.token }}
+  debug-action:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v1.6.1
+        with:
+          role-to-assume: ${{ secrets.ROLE_ARN }}
+          aws-region: ap-northeast-1
+          role-duration-seconds: 900
+      - run: aws sts get-caller-identity
+      - run: aws ecr get-authorization-token | jq '.authorizationData[].expiresAt'
