@@ -26,7 +26,7 @@ jobs:
           path: ~/go/pkg/mod
           key: go-1.18.x-${{ hashFiles('**/go.sum') }}
           restore-keys: |
-            go-${{ matrix.go_version }}-
+            go-1.18.x-
       - name: test
         run: go test -v -race -coverprofile=cover.txt ./...
       - name: upload coverage
@@ -92,3 +92,15 @@ jobs:
           role-duration-seconds: 900
       - run: aws sts get-caller-identity
       - run: aws ecr get-authorization-token | jq '.authorizationData[].expiresAt'
+      - uses: actions/checkout@v3.0.1
+      - uses: actions/setup-go@v3.0.0
+        with:
+          go-version: '1.18.x'
+      - uses: actions/cache@v3.0.2
+        with:
+          path: ~/go/pkg/mod
+          key: go-1.18.x-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            go-1.18.x-
+      - run: |
+          go run ./cmd/authen-amazon-ecr

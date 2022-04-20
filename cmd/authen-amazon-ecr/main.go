@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -40,6 +41,7 @@ func run() int {
 	output("username", creds.user)
 	output("password", creds.password)
 	output("server", creds.server)
+	log.Printf("server=%q username=%q", creds.server, creds.user)
 	return 0
 }
 
