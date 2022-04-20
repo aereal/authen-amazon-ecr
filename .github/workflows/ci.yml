@@ -33,6 +33,17 @@ jobs:
         uses: codecov/codecov-action@v3.0.0
         with:
           files: ./cover.txt
+  test-action:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v1.6.1
+        with:
+          role-to-assume: ${{ secrets.ROLE_ARN }}
+          aws-region: ap-northeast-1
+          role-duration-seconds: 900
+      - run: aws sts get-caller-identity
   determine_release:
     permissions:
       contents: write
