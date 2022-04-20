@@ -24,7 +24,7 @@ runs:
       uses: actions/cache@v3.0.2
       with:
         path: /opt/authen-amazon-ecr
-        key: authen-amazon-ecr
+        key: authen-amazon-ecr-1.1.0
     - name: install
       if: ${{ ! steps.use-cache.outputs.cache-hit }}
       shell: bash
