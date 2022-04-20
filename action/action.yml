@@ -25,14 +25,25 @@ runs:
       with:
         path: /opt/authen-amazon-ecr
         key: authen-amazon-ecr
-    - name: install
+    - uses: actions/setup-go@v3.0.0
+      if: ${{ ! steps.use-cache.outputs.cache-hit }}
+      with:
+        go-version: '1.18.x'
+    - uses: actions/checkout@v3.0.1
+      if: ${{ ! steps.use-cache.outputs.cache-hit }}
+    - uses: actions/cache@v3.0.2
+      if: ${{ ! steps.use-cache.outputs.cache-hit }}
+      with:
+        path: ~/go/pkg/mod
+        key: authen-amazon-ecr-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          authen-amazon-ecr-go-
+    - name: build
       if: ${{ ! steps.use-cache.outputs.cache-hit }}
       shell: bash
       run: |
-        curl -sLO https://github.com/aereal/authen-amazon-ecr/releases/download/v1.0.0/authen-amazon-ecr_1.0.0_linux_amd64.tar.gz
-        tar xzf ./authen-amazon-ecr_1.0.0_linux_amd64.tar.gz
-        mkdir -p /opt/authen-amazon-ecr/bin
-        cp ./authen-amazon-ecr /opt/authen-amazon-ecr/bin/
+        go mod download
+        go build -o /opt/authen-amazon-ecr/bin/authen-amazon/ecr ./cmd/authen-amazon-ecr
     - name: run authenticate-amazon-ecr
       id: authen
       shell: bash

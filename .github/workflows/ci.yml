@@ -33,21 +33,6 @@ jobs:
         uses: codecov/codecov-action@v3.0.0
         with:
           files: ./cover.txt
-  determine_release:
-    permissions:
-      contents: write
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    outputs:
-      will_release: ${{ steps.determine_release.outputs.new_release_published }}
-    steps:
-      - uses: actions/checkout@v3.0.1
-      - id: determine_release
-        uses: cycjimmy/semantic-release-action@v3.0.0
-        with:
-          dry_run: true
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
   release:
     permissions:
       contents: write
@@ -55,28 +40,12 @@ jobs:
     needs:
       - test
       - lint
-      - determine_release
-    if: ${{ needs.determine_release.outputs.will_release }}
+    if: github.ref == 'refs/heads/main'
     environment: stable
     steps:
       - uses: actions/checkout@v3.0.1
         with:
           fetch-depth: 0
       - uses: cycjimmy/semantic-release-action@v3.0.0
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-      - uses: actions/setup-go@v3.0.0
-        with:
-          go-version: '1.18.x'
-      - uses: actions/cache@v3.0.2
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-1.18.x-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
-      - uses: goreleaser/goreleaser-action@v2.9.1
-        with:
-          version: latest
-          args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ github.token }}
