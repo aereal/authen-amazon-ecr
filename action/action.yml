@@ -28,9 +28,11 @@ runs:
     - name: install
       if: ${{ ! steps.use-cache.outputs.cache-hit }}
       shell: bash
+      env:
+        release_version: '1.0.0'
       run: |
-        curl -sLO https://github.com/aereal/authen-amazon-ecr/releases/download/v1.0.0/authen-amazon-ecr_1.0.0_linux_amd64.tar.gz
-        tar xzf ./authen-amazon-ecr_1.0.0_linux_amd64.tar.gz
+        curl -sLO https://github.com/aereal/authen-amazon-ecr/releases/download/v${release_version}/authen-amazon-ecr_${release_version}_linux_amd64.tar.gz
+        tar xzf ./authen-amazon-ecr_${release_version}_linux_amd64.tar.gz
         mkdir -p /opt/authen-amazon-ecr/bin
         cp ./authen-amazon-ecr /opt/authen-amazon-ecr/bin/
     - name: run authenticate-amazon-ecr
