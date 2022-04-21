@@ -29,7 +29,7 @@ runs:
       if: ${{ ! steps.use-cache.outputs.cache-hit }}
       shell: bash
       env:
-        release_version: '1.0.0'
+        release_version: '1.1.0'
       run: |
         curl -sLO https://github.com/aereal/authen-amazon-ecr/releases/download/v${release_version}/authen-amazon-ecr_${release_version}_linux_amd64.tar.gz
         tar xzf ./authen-amazon-ecr_${release_version}_linux_amd64.tar.gz
