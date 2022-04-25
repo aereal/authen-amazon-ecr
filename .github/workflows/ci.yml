@@ -81,3 +81,22 @@ jobs:
           args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ github.token }}
+  test-action:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v1.6.1
+        with:
+          role-to-assume: ${{ secrets.ROLE_ARN }}
+          aws-region: ap-northeast-1
+          role-duration-seconds: 900
+      - uses: actions/checkout@v3.0.1
+      - id: run
+        uses: ./action
+      - run: |
+          if [[ "$_server" != "" ]]; then
+            exit 2
+          fi
+        env:
+          _server: ${{ steps.run.outputs.server }}
