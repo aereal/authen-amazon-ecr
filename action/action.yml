@@ -48,8 +48,9 @@ runs:
       env:
         tag: ${{ steps.determine_tag.outputs.tag }}
       run: |
-        echo "tag=${tag}"
-        curl -sL https://github.com/aereal/authen-amazon-ecr/releases/download/v${tag}/authen-amazon-ecr_${tag}_linux_amd64.tar.gz | tar xzf -
+        archive_url="https://github.com/aereal/authen-amazon-ecr/releases/download/v${tag}/authen-amazon-ecr_${tag}_linux_amd64.tar.gz"
+        echo "download ${archive_url} ..."
+        curl -sfL ${archive_url} | tar xzf -
         mkdir -p /opt/authen-amazon-ecr/bin
         cp ./authen-amazon-ecr /opt/authen-amazon-ecr/bin/
     - name: run authenticate-amazon-ecr
