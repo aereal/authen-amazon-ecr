@@ -95,7 +95,7 @@ jobs:
       - id: run
         uses: ./action
       - run: |
-          if [[ "$_server" != "" ]]; then
+          if [[ "$_server" = "" ]]; then
             exit 2
           fi
         env:
