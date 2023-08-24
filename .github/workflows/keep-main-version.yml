@@ -11,7 +11,7 @@ jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.0.2
+      - uses: actions/checkout@v3.6.0
       - name: push to main version branch
         run: |
           branch_name=$(echo "${GITHUB_REF_NAME}" | sed -E "s/(v[0-9+])\..+/\1/")
